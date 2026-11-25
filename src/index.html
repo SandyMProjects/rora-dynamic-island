@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RORA Island</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- RORA Island: fixed top-center, minimal black pill. -->
+  <div id="island" data-state="home" data-hover="false" data-lyrics="false" data-playlist-open="false" data-menu-open="false">
+    <div id="mainCol">
+      <div id="pill">
+
+        <!-- HOME: jam di tengah. -->
+        <div id="homeView" title="Arahkan kursor untuk kontrol • Klik kanan untuk menu">
+          <div id="homeCenter">
+            <div id="homeClock" class="date-clock">--:--</div>
+            <div id="homeDate" class="date-readable"></div>
+          </div>
+        </div>
+
+        <!-- MUSIC: cover kecil, judul, artis, indikator playlist, jam. -->
+        <div id="musicView" style="display:none" title="Arahkan kursor untuk kontrol • Klik kanan untuk menu">
+          <div id="cover" aria-hidden="true"></div>
+          <div id="trackInfo">
+            <div id="title"></div>
+            <div id="artist"></div>
+            <div id="playlistIndicator" class="playlist-indicator" data-state="checking" role="status" aria-live="polite" title="Memeriksa status lagu di playlist">
+              <span id="playlistIndicatorMark" class="playlist-indicator-mark" aria-hidden="true">·</span>
+              <span id="playlistIndicatorText">Memeriksa playlist</span>
+            </div>
+          </div>
+          <div id="musicMeta">
+            <div id="musicClock" class="date-clock">--:--</div>
+            <div id="musicDate" class="date-readable"></div>
+          </div>
+        </div>
+
+        <!-- PAUSED -->
+        <div id="pausedView" style="display:none" title="Arahkan kursor untuk kontrol • Klik kanan untuk menu">
+          <button id="btnPlayPaused" title="Putar" aria-label="Putar"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+          <div id="pausedTrack">
+            <div id="pausedTrackTitle"></div>
+            <div id="pausedTrackArtist"></div>
+          </div>
+          <div id="pausedMeta">
+            <div id="pausedClock" class="date-clock">--:--</div>
+            <div id="pausedDate" class="date-readable"></div>
+          </div>
+        </div>
+
+        <!-- NOTIFIKASI -->
+        <div id="notifyView" style="display:none">
+          <div id="notifyText"></div>
+        </div>
+
+      </div>
+
+      <!-- HOME: mic, wake word, dan tombol keluar muncul tepat di bawah jam saat hover. -->
+      <div id="homeExpandRow">
+        <div id="homeActions">
+          <button id="btnMicHome" class="home-action" title="Perintah suara" aria-label="Perintah suara">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 1 0-7 0v5A3.5 3.5 0 0 0 12 15z"/><path d="M17.5 11.5a5.5 5.5 0 0 1-11 0H4.5a7.5 7.5 0 0 0 6.5 7.42V21h2v-2.08a7.5 7.5 0 0 0 6.5-7.42z"/></svg>
+            <span>Mic</span>
+          </button>
+          <button id="btnWakeHome" class="home-action wake-btn" title="Wake word on/off" aria-label="Wake word on atau off">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12.3 3.2c-4.7 0-7.8 3.4-7.8 8.2 0 4.2 2.2 7.5 5.8 8.7 1.1.4 2.2-.4 2.2-1.6v-2.2c0-.8.5-1.4 1.2-1.6 2.2-.6 3.8-2.8 3.8-5.2 0-3.8-2.1-6.3-5.2-6.3zm-.3 9.4a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+            <span>Listen</span>
+            <span class="wake-dot" aria-hidden="true"></span>
+          </button>
+          <button id="btnExitHome" class="home-exit-btn" title="Tutup RORA Island" aria-label="Tutup RORA Island">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v8"/><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Kontrol musik, volume Spotify, drawer playlist (long-press +), dan paused. -->
+      <div id="expandRow">
+        <div id="miniProgress">
+          <span id="timeCurMini">0:00</span>
+          <div id="progressMini"><div id="progressMiniFill"></div></div>
+          <span id="timeTotMini">0:00</span>
+        </div>
+        <div id="musicActions">
+          <div class="action-group">
+            <button id="btnPrev" title="Sebelumnya" aria-label="Sebelumnya"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="5" y="6" width="2.6" height="12" rx="1"/><path d="M19 6.5v11L9.5 12z"/></svg></button>
+            <button id="btnPlay" title="Play / Pause" aria-label="Play atau pause"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+            <button id="btnNext" title="Berikutnya" aria-label="Berikutnya"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="16.4" y="6" width="2.6" height="12" rx="1"/><path d="M5 6.5v11l9.5-5.5z"/></svg></button>
+          </div>
+          <div class="action-group">
+            <button id="btnLyricsM" title="Lirik" aria-label="Lirik"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M4 6h16v2H4zM4 11h16v2H4zM4 16h10v2H4z"/></svg></button>
+            <button id="btnBridgeAdd" title="Klik: tambah ke playlist • Tahan: ganti playlist" aria-label="Tambah ke playlist atau tahan untuk ganti playlist"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg></button>
+          </div>
+          <div class="action-group action-group-right">
+            <button id="btnMicMusic" title="Perintah suara" aria-label="Perintah suara"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 1 0-7 0v5A3.5 3.5 0 0 0 12 15z"/><path d="M17.5 11.5a5.5 5.5 0 0 1-11 0H4.5a7.5 7.5 0 0 0 6.5 7.42V21h2v-2.08a7.5 7.5 0 0 0 6.5-7.42z"/></svg></button>
+            <button id="btnWakeMusic" class="wake-btn" title="Wake word on/off" aria-label="Wake word on atau off"><span aria-hidden="true">👂</span><span class="wake-dot" aria-hidden="true"></span></button>
+          </div>
+        </div>
+        <div id="volumeRow">
+          <button id="btnMuteMusic" title="Mute Spotify" aria-label="Mute atau unmute Spotify">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+          </button>
+          <input id="spotifyVolume" type="range" min="0" max="100" value="100" aria-label="Volume Spotify" />
+          <span id="spotifyVolText">100%</span>
+        </div>
+        <div id="playlistDrawer" aria-label="Daftar playlist tujuan">
+          <div class="playlist-drawer-header">Pilih Playlist Tujuan</div>
+          <div id="playlistList" role="listbox"></div>
+        </div>
+        <div id="pausedActions">
+          <button id="btnMicPaused" title="Perintah suara" aria-label="Perintah suara"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 1 0-7 0v5A3.5 3.5 0 0 0 12 15z"/><path d="M17.5 11.5a5.5 5.5 0 0 1-11 0H4.5a7.5 7.5 0 0 0 6.5 7.42V21h2v-2.08a7.5 7.5 0 0 0 6.5-7.42z"/></svg></button>
+          <button id="btnWakePaused" class="wake-btn" title="Wake word on/off" aria-label="Wake word on atau off"><span aria-hidden="true">👂</span><span class="wake-dot" aria-hidden="true"></span></button>
+        </div>
+      </div>
+
+      <!-- Lirik di bawah pill musik. -->
+      <div id="lyricsDrop" style="display:none" aria-live="polite">
+        <div id="lyricsBox">
+          <div id="lyricsLines"></div>
+          <div id="lyricsPlain"></div>
+          <div id="lyricsEmpty"></div>
+        </div>
+      </div>
+
+      <!-- Menu klik kanan: pindah monitor & tutup RORA Island -->
+      <div id="islandMenuBar" aria-label="Menu sistem RORA">
+        <button id="btnSwitchMonitor" class="sys-menu-btn" type="button" style="display:none" title="Pindah posisi layar">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <span id="switchMonitorLabel">Monitor 2</span>
+        </button>
+        <button id="btnExitApp" class="sys-menu-btn sys-menu-exit" type="button" title="Hentikan dan tutup RORA Island">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v8"/><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/></svg>
+          <span>Tutup RORA</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="progressHairline" aria-hidden="true"><div id="progressHairlineFill"></div></div>
+
+    <!-- Panel lama: disembunyikan, tombol mic/wake tetap dipakai via kode -->
+    <div id="expanded" style="display:none">
+      <div id="progressRow">
+        <span id="timeCurrent">0:00</span>
+        <div id="progressBar"><div id="progressFill"></div></div>
+        <span id="timeTotal">0:00</span>
+      </div>
+      <div id="controlsRow">
+        <button id="btnPlay2" title="Play / Pause">▶</button>
+        <button id="btnMic" title="Perintah suara">🎤</button>
+        <button id="btnWake" title="Wake word">👂 Wake OFF</button>
+        <span id="roraAnswer">RORA siap. Klik mic, lalu bicara.</span>
+        <span id="sourceLabel">SMTC • lokal</span>
+      </div>
+      <div id="status">RORA • Fase 2 • Connect Spotify</div>
+    </div>
+  </div>
+  <script type="module" src="main.js"></script>
+</body>
+</html>

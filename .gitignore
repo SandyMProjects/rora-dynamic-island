@@ -1,0 +1,27 @@
+@"
+# Node.js / Frontend
+node_modules/
+dist/
+
+# Tauri & Rust Build Artifacts (5.8+ GB)
+src-tauri/target/
+src-tauri/gen/
+
+# Python Environment & Cache
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Temporary Audio & Environment Secrets
+*.wav
+rora_voice_tmp.wav
+.env
+.env.*
+!.env.example
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+"@ | Set-Content -Path ".gitignore" -Encoding UTF8

@@ -1,0 +1,22 @@
+[package]
+name = "rora-island"
+version = "0.1.0"
+description = "RORA Island — Dynamic Island pasif untuk Windows (Fase 1: Spotify SMTC + lirik)"
+authors = ["RORA Island"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-global-shortcut = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.12", features = ["json"] }
+
+# Hanya di Windows: SMTC (Windows.Media.Control) lewat windows-rs.
+# Di OS lain, modul media.rs memakai stub supaya logika frontend tetap bisa dibaca,
+# tapi get_now_playing akan mengembalikan playing=false.
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.61", features = ["Media_Control", "Foundation"] }
