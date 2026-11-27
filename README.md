@@ -8,7 +8,7 @@ Built with **Tauri v2 (Rust)**, **Vanilla JavaScript**, **Python (openWakeWord +
 
 ## Preview & UI States
 
-<!-- Drag & drop your compressed demo video (.mp4 under 10 MB) right below this line in GitHub's web editor -->
+![Demo Fitur RORA Island](docs/rora-demo.gif)<!-- Drag & drop your compressed demo video (.mp4 under 10 MB) right below this line in GitHub's web editor -->
 
 ### Interactive Pill States
 
