@@ -6,6 +6,30 @@ Built with **Tauri v2 (Rust)**, **Vanilla JavaScript**, **Python (openWakeWord +
 
 ---
 
+## Preview & UI States
+
+<!-- Drag & drop your compressed demo video (.mp4 under 10 MB) right below this line in GitHub's web editor -->
+
+### Interactive Pill States
+
+| Standby Clock Mode (`home`) | Active Media & Playlist Status (`music`) |
+| :---: | :---: |
+| ![Standby Clock Mode](docs/home.png) | ![Music Playback & Playlist Status](docs/music-play.png) |
+| **Live Synced Lyrics (`lyrics`)** | **Expanded Controls & Playlist Drawer** |
+| ![Live Synced Lyrics](docs/music-play-lyric.png) | ![Expanded Media Controls & Playlist Selector](docs/music-play-playlist.png) |
+
+### Offline Voice Assistant ("Hey Rora")
+
+| Always-On Wake Word Standby | Active Voice Listening (`6s` Window) |
+| :---: | :---: |
+| ![Wake Word Active Notification](docs/wakeword-notif.png) | ![Voice Command Listening State](docs/RORA-listen.png) |
+
+| Hands-Free Command Execution Feedback |
+| :---: |
+| ![Voice Command Execution Feedback](docs/RORA-feedback.png) |
+
+---
+
 ## Key Features
 
 - **Passive Windows SMTC Integration**: Reads Spotify playback metadata and timeline progress natively via Windows System Media Transport Controls (`Windows.Media.Control`) without touching external processes.
@@ -36,54 +60,58 @@ RORA Island is strictly a passive overlay window designed to stay safe alongside
 
 ## System Architecture
 
-```text
-+-------------------------------------------------------------------+
-|                     RORA Island (Tauri v2)                        |
-|  +-----------------------------+  +----------------------------+  |
-|  |   Frontend (HTML/CSS/JS)    |  |      Rust Backend          |  |
-|  | - Dynamic Island Pill UI    |  | - Windows SMTC Reader      |  |
-|  | - 60fps Progress & Lyrics   |  | - LRCLIB API + Local Cache |  |
-|  | - Playlist & Volume Drawer  |  | - Localhost Bridge (:8899) |  |
-|  +--------------+--------------+  +-----+---------------+------+  |
-+-----------------|-----------------------|---------------|---------+
-                  | Tauri IPC             | Subprocess    | HTTP (127.0.0.1:8899)
-                  v                       v               v
-      +-----------------------+  +----------------+  +--------------------+
-      |  Global Hotkey Alt+`  |  | Python Workers |  | Spotify Desktop    |
-      +-----------------------+  | - openWakeWord |  | (Spicetify Plugin: |
-                                 |   (hey_rora)   |  |  rora-add.js)      |
-                                 | - faster-      |  +--------------------+
-                                 |   whisper STT  |
-                                 +----------------+
-```
+    +-------------------------------------------------------------------+
+    |                     RORA Island (Tauri v2)                        |
+    |  +-----------------------------+  +----------------------------+  |
+    |  |   Frontend (HTML/CSS/JS)    |  |      Rust Backend          |  |
+    |  | - Dynamic Island Pill UI    |  | - Windows SMTC Reader      |  |
+    |  | - 60fps Progress & Lyrics   |  | - LRCLIB API + Local Cache |  |
+    |  | - Playlist & Volume Drawer  |  | - Localhost Bridge (:8899) |  |
+    |  +--------------+--------------+  +-----+---------------+------+  |
+    +-----------------|-----------------------|---------------|---------+
+                      | Tauri IPC             | Subprocess    | HTTP (127.0.0.1:8899)
+                      v                       v               v
+          +-----------------------+  +----------------+  +--------------------+
+          |  Global Hotkey Alt+`  |  | Python Workers |  | Spotify Desktop    |
+          +-----------------------+  | - openWakeWord |  | (Spicetify Plugin: |
+                                     |   (hey_rora)   |  |  rora-add.js)      |
+                                     | - faster-      |  +--------------------+
+                                     |   whisper STT  |
+                                     +----------------+
 
 ---
 
 ## Project Structure
 
-```text
-rora-dynamic-island/
-├── src/                         # Frontend UI (HTML, CSS, Vanilla JS)
-│   ├── index.html               # Main layout & standalone browser demo entry
-│   ├── main.js                  # State machine, progress interpolation, & IPC calls
-│   └── styles.css               # Pill transitions, visualizer, & drawer styling
-├── src-tauri/                   # Tauri v2 & Rust backend
-│   ├── src/
-│   │   ├── main.rs              # Window animations, multi-monitor, IPC & Python workers
-│   │   ├── bridge.rs            # Local HTTP bridge server (127.0.0.1:8899)
-│   │   ├── media.rs             # Windows SMTC session reader & media controls
-│   │   └── lyrics.rs            # LRCLIB client & local JSON caching
-│   ├── capabilities/
-│   ├── icons/
-│   ├── Cargo.toml
-│   └── tauri.conf.json
-├── spicetify-extension/         # Spotify Desktop bridge extension
-│   └── rora-add.js
-├── openwakeword_listener.py     # Custom "Hey Rora" ONNX wake-word listener
-├── voice_stt.py                 # Offline microphone recorder & faster-whisper STT
-├── hey_rora.onnx                # Trained ONNX wake-word model
-└── package.json
-```
+    rora-dynamic-island/
+    ├── docs/                        # UI state screenshots for documentation
+    │   ├── home.png
+    │   ├── music-play.png
+    │   ├── music-play-lyric.png
+    │   ├── music-play-playlist.png
+    │   ├── wakeword-notif.png
+    │   ├── RORA-listen.png
+    │   └── RORA-feedback.png
+    ├── src/                         # Frontend UI (HTML, CSS, Vanilla JS)
+    │   ├── index.html               # Main layout & standalone browser demo entry
+    │   ├── main.js                  # State machine, progress interpolation, & IPC calls
+    │   └── styles.css               # Pill transitions, visualizer, & drawer styling
+    ├── src-tauri/                   # Tauri v2 & Rust backend
+    │   ├── src/
+    │   │   ├── main.rs              # Window animations, multi-monitor, IPC & Python workers
+    │   │   ├── bridge.rs            # Local HTTP bridge server (127.0.0.1:8899)
+    │   │   ├── media.rs             # Windows SMTC session reader & media controls
+    │   │   └── lyrics.rs            # LRCLIB client & local JSON caching
+    │   ├── capabilities/
+    │   ├── icons/
+    │   ├── Cargo.toml
+    │   └── tauri.conf.json
+    ├── spicetify-extension/         # Spotify Desktop bridge extension
+    │   └── rora-add.js
+    ├── openwakeword_listener.py     # Custom "Hey Rora" ONNX wake-word listener
+    ├── voice_stt.py                 # Offline microphone recorder & faster-whisper STT
+    ├── hey_rora.onnx                # Trained ONNX wake-word model
+    └── package.json
 
 ---
 
@@ -103,17 +131,13 @@ rora-dynamic-island/
 
 ### 1. Clone & Install Node Dependencies
 
-```powershell
-git clone https://github.com/SandyMProjects/rora-dynamic-island.git
-cd rora-dynamic-island
-npm install
-```
+    git clone https://github.com/SandyMProjects/rora-dynamic-island.git
+    cd rora-dynamic-island
+    npm install
 
 ### 2. Install Python Voice & Wake-Word Dependencies
 
-```powershell
-py -m pip install openwakeword faster-whisper sounddevice numpy
-```
+    py -m pip install openwakeword faster-whisper sounddevice numpy
 
 > **Note**: On first launch, `faster-whisper` automatically downloads the `tiny` speech model (~75 MB) and `openwakeword` caches its base embedding model locally.
 
@@ -121,24 +145,20 @@ py -m pip install openwakeword faster-whisper sounddevice numpy
 
 Copy `spicetify-extension/rora-add.js` into your Spicetify Extensions directory and apply it:
 
-```powershell
-Copy-Item "spicetify-extension\rora-add.js" "$env:APPDATA\spicetify\Extensions\rora-add.js"
-spicetify config extensions rora-add.js
-spicetify apply
-```
+    Copy-Item "spicetify-extension\rora-add.js" "$env:APPDATA\spicetify\Extensions\rora-add.js"
+    spicetify config extensions rora-add.js
+    spicetify apply
 
 ### 4. Run or Build
 
-```powershell
-# Preview UI animations in browser (demo mode, no Rust required)
-start src/index.html
+    # Preview UI animations in browser (demo mode, no Rust required)
+    start src/index.html
 
-# Run full desktop app in development mode
-npm run tauri dev
+    # Run full desktop app in development mode
+    npm run tauri dev
 
-# Build standalone Windows release installer (.exe / .msi)
-npm run tauri build
-```
+    # Build standalone Windows release installer (.exe / .msi)
+    npm run tauri build
 
 ---
 
